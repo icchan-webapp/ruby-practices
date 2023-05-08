@@ -2,7 +2,7 @@
 
 NUMBER_OF_DISPLAY_TIMES = 20
 
-for num in 1 .. NUMBER_OF_DISPLAY_TIMES do
+(1..NUMBER_OF_DISPLAY_TIMES).each do |num|
   result =
     if num % 15 == 0
       "FizzBuzz"
