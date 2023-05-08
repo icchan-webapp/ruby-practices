@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-NUMBER_OF_DISPLAY_TIMES = 20
+DISPLAY_COUNT = 20
 
-(1..NUMBER_OF_DISPLAY_TIMES).each do |num|
+(1..DISPLAY_COUNT).each do |num|
   result =
     if num % 15 == 0
       "FizzBuzz"
