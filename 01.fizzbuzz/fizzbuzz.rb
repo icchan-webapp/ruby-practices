@@ -11,7 +11,7 @@ for num in 1 .. NUMBER_OF_DISPLAY_TIMES do
     elsif num % 5 == 0
       "Buzz"
     else
-      num
+      num.to_s
     end
 
   puts result
