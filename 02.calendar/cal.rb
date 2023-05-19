@@ -48,3 +48,6 @@ end
     print "#{day}".rjust(3)
   end
 end
+
+# カレンダーの最後の行とプロンプトの間に一行空きを作成。
+puts "\n "
