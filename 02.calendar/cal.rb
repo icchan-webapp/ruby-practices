@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 # ライブラリの読み込み。
 require 'date'
 require 'optparse'
