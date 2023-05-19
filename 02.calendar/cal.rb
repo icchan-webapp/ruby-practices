@@ -64,4 +64,4 @@ end
 end
 
 # カレンダーの最後の行とプロンプトの間に一行空きを作成。
-puts "\n "
+puts last_date.saturday? ? "\n" : "\n "
