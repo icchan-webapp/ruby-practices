@@ -29,7 +29,13 @@ ADDITIONAL_INDENT = 3
 add_count = first_date.strftime(format = "%w").to_i
 
 indent = INITIAL_INDENT + ADDITIONAL_INDENT * add_count
-print "1".rjust(indent)
+
+# 一日が土曜日の場合に改行を追加。
+if first_date.saturday? 
+  puts "1".rjust(indent)
+else
+  print "1".rjust(indent)
+end
 
 # 二日から最終日までをeachメソッドによって、表示。
 (2..last_date.day).each do |day|
