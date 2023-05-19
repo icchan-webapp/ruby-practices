@@ -30,22 +30,36 @@ add_count = first_date.strftime(format = "%w").to_i
 
 indent = INITIAL_INDENT + ADDITIONAL_INDENT * add_count
 
+# 今日が一日である場合、1の文字色と背景色を反転。
+day = 1
+if first_date == today
+  day = "\e[7m#{day}\e[0m"
+  indent += day.size - 1
+end
+
 # 一日が土曜日の場合に改行を追加。
-if first_date.saturday? 
-  puts "1".rjust(indent)
+if first_date.saturday?
+  puts "#{day}".rjust(indent)
 else
-  print "1".rjust(indent)
+  print "#{day}".rjust(indent)
+  print "".rjust(1)
 end
 
 # 二日から最終日までをeachメソッドによって、表示。
 (2..last_date.day).each do |day|
   date = Date.new(@year, @month, day)
+
+  # 今日の場合、文字色と背景色を反転。
+  if date == today
+    print "".rjust(1) if day < 2
+    day = "\e[7m#{day}\e[0m"
+  end
+  
   if date.saturday?
-    puts "#{day}".rjust(3)
-  elsif date.sunday?
-    print "#{day}".rjust(2)
+    puts "#{day}".rjust(2)
   else
-    print "#{day}".rjust(3)
+    print "#{day}".rjust(2)
+    print "".rjust(1)
   end
 end
 
