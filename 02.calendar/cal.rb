@@ -7,22 +7,23 @@ require 'optparse'
 # OptionParserオブジェクトoptを作成。
 opt = OptionParser.new
 
-# オプションを定義し、オプションに指定された値を変数に代入する。
-opt.on('-y VAL') {|v| @year = v.to_i }
-opt.on('-m VAL') {|v| @month = v.to_i }
+# 現在の年月を変数に代入。
+today = Date.today
+year = today.year
+month = today.mon
+
+# 年月を指定するオプションを定義。
+opt.on('-y VAL') {|v| year = v.to_i }
+opt.on('-m VAL') {|v| month = v.to_i }
 opt.parse!(ARGV)
 
-# オプションが使用されていない場合、デフォルト値を変数に代入する。
-today = Date.today
-@year = today.year unless @year
-@month = today.mon unless @month
 
 # 一日と最終日のオブジェクトを作成。
-first_date = Date.new(@year, @month, 1)
-last_date = Date.new(@year, @month, -1)
+first_date = Date.new(year, month, 1)
+last_date = Date.new(year, month, -1)
 
 # カレンダーの年月と曜日を表示。
-puts "#{@month}月 #{@year}".center(20)
+puts "#{month}月 #{year}".center(20)
 puts "日 月 火 水 木 金 土"
 
 # 一日の曜日を確認し、それに合わせてインデントを調整。
@@ -49,7 +50,7 @@ end
 
 # 二日から最終日までをeachメソッドによって、表示。
 (2..last_date.day).each do |day|
-  date = Date.new(@year, @month, day)
+  date = Date.new(year, month, day)
 
   # 今日の場合、文字色と背景色を反転。
   if date == today
