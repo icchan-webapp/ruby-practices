@@ -17,7 +17,6 @@ opt.on('-y VAL') {|v| year = v.to_i }
 opt.on('-m VAL') {|v| month = v.to_i }
 opt.parse!(ARGV)
 
-
 # 一日と最終日のオブジェクトを作成。
 first_date = Date.new(year, month, 1)
 last_date = Date.new(year, month, -1)
@@ -26,42 +25,27 @@ last_date = Date.new(year, month, -1)
 puts "#{month}月 #{year}".center(20)
 puts "日 月 火 水 木 金 土"
 
-# 一日の曜日を確認し、それに合わせてインデントを調整。
-INITIAL_INDENT = 2
+# 一日の曜日に合わせて、一日のインデントを算出。
 ADDITIONAL_INDENT = 3
 add_count = first_date.strftime(format = "%w").to_i
+indent = ADDITIONAL_INDENT * add_count
 
-indent = INITIAL_INDENT + ADDITIONAL_INDENT * add_count
+# 一日から最終日までをRangeクラスとeachメソッドによって、取得。
+(first_date..last_date).each do |date|
+  # 日にちを文字列にし、インデントを調整。
+  day = date.day.to_s.rjust(2)
 
-# 今日が一日である場合、1の文字色と背景色を反転。
-day = 1
-if first_date == today
-  day = "\e[7m#{day}\e[0m"
-  indent += day.size - 1
-end
-
-# 一日が土曜日の場合に改行を追加。
-if first_date.saturday?
-  puts "#{day}".rjust(indent)
-else
-  print "#{day}".rjust(indent)
-  print "".rjust(1)
-end
-
-# 二日から最終日までをeachメソッドによって、表示。
-(2..last_date.day).each do |day|
-  date = Date.new(year, month, day)
+  # 一日の場合、算出した一日のインデントを反映。
+  print "".rjust(indent) if date == first_date
 
   # 今日の場合、文字色と背景色を反転。
-  if date == today
-    print "".rjust(1) if day < 2
-    day = "\e[7m#{day}\e[0m"
-  end
-  
+  day = "\e[7m#{day}\e[0m" if date == today
+
+  # 曜日によって、出力の仕方を変更。
   if date.saturday?
-    puts "#{day}".rjust(2)
+    puts "#{day}"
   else
-    print "#{day}".rjust(2)
+    print "#{day}"
     print "".rjust(1)
   end
 end
