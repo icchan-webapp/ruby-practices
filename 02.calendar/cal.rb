@@ -41,11 +41,13 @@ print "".rjust(indent)
   # 今日の場合、文字色と背景色を反転。
   day = "\e[7m#{day}\e[0m" if date == today
 
-  # 曜日によって、出力の仕方を変更。
+  # 日にちを出力。
+  print "#{day}"
+
+  # 曜日によって、改行とスペースを変更。
   if date.saturday?
-    puts "#{day}"
+    puts
   else
-    print "#{day}"
     print "".rjust(1)
   end
 end
