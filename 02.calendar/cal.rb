@@ -30,13 +30,13 @@ ADDITIONAL_INDENT = 3
 add_count = first_date.strftime(format = "%w").to_i
 indent = ADDITIONAL_INDENT * add_count
 
+# 一日のインデントを反映。
+print "".rjust(indent)
+
 # 一日から最終日までをRangeクラスとeachメソッドによって、取得。
 (first_date..last_date).each do |date|
   # 日にちを文字列にし、インデントを調整。
   day = date.day.to_s.rjust(2)
-
-  # 一日の場合、算出した一日のインデントを反映。
-  print "".rjust(indent) if date == first_date
 
   # 今日の場合、文字色と背景色を反転。
   day = "\e[7m#{day}\e[0m" if date == today
