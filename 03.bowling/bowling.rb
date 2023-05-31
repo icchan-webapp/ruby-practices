@@ -14,10 +14,8 @@ scores.each do |s|
   end
 end
 
-frames = []
-shots.each_slice(2) do |s|
-  frames << s
-end
+# 倒したピンの本数の配列を生成。
+frames = shots.each_slice(2).to_a
 
 point = 0
 frames.each_with_index do |frame, i|
