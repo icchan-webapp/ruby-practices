@@ -3,8 +3,30 @@
 require 'debug'
 
 class Game
-  def initialize(frames)
-    @frame_instances = frames.map { |frame| Frame.new(*frame) }
+  def initialize
+    @frame_instances = scores_per_frame.map { |score_per_frame| Frame.new(*score_per_frame) }
+  end
+
+  def scores_per_frame
+    scores = ARGV[0].split(',')
+
+    scores_per_frame = []
+    score_per_frame = []
+
+    scores.each do |score|
+      score_per_frame << score
+
+      if scores_per_frame.size < 10
+        if score_per_frame.size >= 2 || score == 'X'
+          scores_per_frame << score_per_frame.dup
+          score_per_frame.clear
+        end
+      else
+        scores_per_frame.last << score
+      end
+    end
+
+    scores_per_frame
   end
 
   def score
