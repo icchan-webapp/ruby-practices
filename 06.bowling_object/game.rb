@@ -4,7 +4,7 @@ require 'debug'
 
 class Game
   def initialize
-    @frame_instances = scores_per_frame.map { |score_per_frame| Frame.new(*score_per_frame) }
+    @frames = scores_per_frame.map { |score_per_frame| Frame.new(*score_per_frame) }
   end
 
   def scores_per_frame
@@ -32,21 +32,21 @@ class Game
   def score
     score = 0
 
-    @frame_instances.each.with_index(1) do |frame_instance, i|
-      next_frame_instance, after_next_frame_instance = @frame_instances.slice(i, 2)
-      score += frame_instance.score
+    @frames.each.with_index(1) do |frame, i|
+      next_frame, after_next_frame = @frames.slice(i, 2)
+      score += frame.score
 
-      next if i == 10 || !frame_instance.strike_or_spare?
+      next if i == 10 || !frame.strike_or_spare?
 
-      score += next_frame_instance.first_shot.score
+      score += next_frame.first_shot.score
 
-      next if frame_instance.spare?
+      next if frame.spare?
 
-      score += next_frame_instance.second_shot.score
+      score += next_frame.second_shot.score
 
       next if i == 9
 
-      score += after_next_frame_instance.first_shot.score if next_frame_instance.strike?
+      score += after_next_frame.first_shot.score if next_frame.strike?
     end
 
     score
