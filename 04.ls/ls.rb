@@ -2,7 +2,16 @@
 
 # frozen_string_literal: true
 
-files = Dir.glob('*')
+require 'optparse'
+
+params = ARGV.getopts('a').transform_keys(&:to_sym)
+
+def files(params)
+  flags = params[:a] ? File::FNM_DOTMATCH : 0
+  Dir.glob('*', flags)
+end
+
+files = files(params)
 indent = files.map(&:size).max + 1
 
 LINE = 3
