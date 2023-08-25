@@ -4,11 +4,11 @@
 
 require 'optparse'
 
-params = ARGV.getopts('a').transform_keys(&:to_sym)
+params = ARGV.getopts('r').transform_keys(&:to_sym)
 
 def files(params)
-  flags = params[:a] ? File::FNM_DOTMATCH : 0
-  Dir.glob('*', flags)
+  files = Dir.glob('*')
+  params[:r] ? files.reverse : files
 end
 
 files = files(params)
