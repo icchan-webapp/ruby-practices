@@ -52,10 +52,6 @@ if params[:l]
     end
   end
 
-  def max_chars(files_with_details, index)
-    files_with_details.transpose[index].map { |file_with_detail| file_with_detail.to_s.strip.size }.max
-  end
-
   blocks_total = 0
   
   files_with_details =
@@ -81,6 +77,10 @@ if params[:l]
       [permissions.unshift(file_type_chr(file)).join, nlink, uid, gid, size, mtime, file]
     end
 
+  def max_chars(files_with_details, index)
+    files_with_details.transpose[index].map { |file_with_detail| file_with_detail.to_s.strip.size }.max
+  end
+  
   puts "total #{blocks_total}"
 
   files_with_details.each do |file_with_details|
