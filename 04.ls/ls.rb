@@ -16,9 +16,10 @@ if params[:l]
     mode
   end
 
+  SPECIAL_PERMISSIONS = { t: '1', sgid: '2', suid: '4' }
+  
   def change_x_to_special_permission(number, special_permission)
-    special_permissions = { t: '1', sgid: '2', suid: '4' }
-    special_permission_key = special_permissions.key(special_permission)
+    special_permission_key = SPECIAL_PERMISSIONS.key(special_permission)
     number < 1 ? special_permission_key.upcase[0] : special_permission_key[0]
   end
 
@@ -41,8 +42,7 @@ if params[:l]
 
   files_with_details = []
   blocks_total = 0
-  permission_marks = { r: 4, w: 2, x: 1 }
-
+  
   files.each do |file|
     file_status = File.stat(file)
     mode = mode(file_status)
@@ -53,8 +53,9 @@ if params[:l]
 
     permission_numbers.each_char.with_index do |permission_number, index|
       number = permission_number.to_i
-
-      permission_marks.each do |permission_mark, value|
+      PERMISSION_MARKS = { r: 4, w: 2, x: 1 }
+      
+      PERMISSION_MARKS.each do |permission_mark, value|
         if index == permission_numbers.size - 1 && permission_mark == :x && special_permission != '0'
           permissions << change_x_to_special_permission(number, special_permission)
         elsif number >= value
