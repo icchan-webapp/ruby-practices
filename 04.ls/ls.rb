@@ -56,30 +56,30 @@ if params[:l]
     files_with_details.transpose[index].map { |file_with_detail| file_with_detail.to_s.strip.size }.max
   end
 
-  files_with_details = []
   blocks_total = 0
+  
+  files_with_details =
+    files.map do |file|
+      file_status = File.stat(file)
+      mode = mode(file_status)
+      permission_numbers = mode[3, 3]
+      special_permission = mode[2]
 
-  files.each do |file|
-    file_status = File.stat(file)
-    mode = mode(file_status)
-    permission_numbers = mode[3, 3]
-    special_permission = mode[2]
+      permissions =
+        permission_numbers.each_char.map.with_index do |permission_number, index|
+          number = permission_number.to_i
+          change_numbers_to_chars(index, number, special_permission)
+        end
 
-    permissions =
-      permission_numbers.each_char.map.with_index do |permission_number, index|
-        number = permission_number.to_i
-        change_numbers_to_chars(index, number, special_permission)
-      end
+      nlink = file_status.nlink
+      uid = Etc.getpwuid(file_status.uid).name
+      gid = Etc.getgrgid(file_status.gid).name
+      size = file_status.size
+      mtime = file_status.mtime.strftime('%-m %-d %H:%M')
+      blocks_total += file_status.blocks
 
-    nlink = file_status.nlink
-    uid = Etc.getpwuid(file_status.uid).name
-    gid = Etc.getgrgid(file_status.gid).name
-    size = file_status.size
-    mtime = file_status.mtime.strftime('%-m %-d %H:%M')
-    blocks_total += file_status.blocks
-
-    files_with_details.push [permissions.unshift(file_type_chr(file)).join, nlink, uid, gid, size, mtime, file]
-  end
+      [permissions.unshift(file_type_chr(file)).join, nlink, uid, gid, size, mtime, file]
+    end
 
   puts "total #{blocks_total}"
 
