@@ -53,7 +53,7 @@ if params[:l]
   end
 
   blocks_total = 0
-  
+
   files_with_details =
     files.map do |file|
       file_status = File.stat(file)
@@ -77,23 +77,26 @@ if params[:l]
       [permissions.unshift(file_type_chr(file)).join, nlink, uid, gid, size, mtime, file]
     end
 
+  def margin(index)
+    if index.zero?
+      0
+    elsif [1, 2, 6].include?(index)
+      1
+    else
+      2
+    end
+  end
+
   def max_chars(files_with_details, index)
     files_with_details.transpose[index].map { |file_with_detail| file_with_detail.to_s.strip.size }.max
   end
-  
+
   puts "total #{blocks_total}"
 
   files_with_details.each do |file_with_details|
     file_with_details.each_with_index do |file_with_detail, index|
+      margin = margin(index)
       max_chars = max_chars(files_with_details, index)
-      margin =
-        if index.zero?
-          0
-        elsif [1, 2, 6].include?(index)
-          1
-        else
-          2
-        end
 
       file_with_details[index] =
         if index != 6
