@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 # frozen_string_literal: true
+# shareable_constant_value: literal
 
 require 'optparse'
 require 'etc'
@@ -16,8 +17,23 @@ if params[:l]
     mode
   end
 
+  PERMISSION_MARKS = { r: 4, w: 2, x: 1 }
+
+  def change_numbers_to_chars(index, number, special_permission)
+    PERMISSION_MARKS.map do |permission_mark, value|
+      if index == 2 && permission_mark == :x && special_permission != '0'
+        change_x_to_special_permission(number, special_permission)
+      elsif number >= value
+        number -= value
+        permission_mark
+      else
+        '-'
+      end
+    end
+  end
+
   SPECIAL_PERMISSIONS = { t: '1', sgid: '2', suid: '4' }
-  
+
   def change_x_to_special_permission(number, special_permission)
     special_permission_key = SPECIAL_PERMISSIONS.key(special_permission)
     number < 1 ? special_permission_key.upcase[0] : special_permission_key[0]
@@ -42,30 +58,18 @@ if params[:l]
 
   files_with_details = []
   blocks_total = 0
-  
+
   files.each do |file|
     file_status = File.stat(file)
     mode = mode(file_status)
     permission_numbers = mode[3, 3]
     special_permission = mode[2]
 
-    permissions = []
-
-    permission_numbers.each_char.with_index do |permission_number, index|
-      number = permission_number.to_i
-      PERMISSION_MARKS = { r: 4, w: 2, x: 1 }
-      
-      PERMISSION_MARKS.each do |permission_mark, value|
-        if index == permission_numbers.size - 1 && permission_mark == :x && special_permission != '0'
-          permissions << change_x_to_special_permission(number, special_permission)
-        elsif number >= value
-          permissions << permission_mark
-          number -= value
-        else
-          permissions << '-'
-        end
+    permissions =
+      permission_numbers.each_char.map.with_index do |permission_number, index|
+        number = permission_number.to_i
+        change_numbers_to_chars(index, number, special_permission)
       end
-    end
 
     nlink = file_status.nlink
     uid = Etc.getpwuid(file_status.uid).name
