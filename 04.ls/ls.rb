@@ -11,7 +11,7 @@ files = Dir.glob('*')
 
 NUMBER_OF_COLUMNS = 3
 
-def execute_ls(files)
+def show_files_without_details(files)
   indent = files.map(&:size).max + 1
   number_of_rows = (files.size.to_f / NUMBER_OF_COLUMNS).ceil
 
@@ -105,7 +105,7 @@ def max_chars(files_with_details, index)
   files_with_details.transpose[index].map { |file_with_detail| file_with_detail.to_s.strip.size }.max
 end
 
-def execute_ls_with_l_option(files, files_with_details)
+def show_files_with_details(files, files_with_details)
   blocks_total = files.map { |file| File.stat(file).blocks }.sum
   puts "total #{blocks_total}"
 
@@ -127,7 +127,7 @@ def execute_ls_with_l_option(files, files_with_details)
 end
 
 if params[:l]
-  execute_ls_with_l_option(files, files_with_details)
+  show_files_with_details(files, files_with_details)
 else
-  execute_ls(files)
+  show_files_without_details(files)
 end
