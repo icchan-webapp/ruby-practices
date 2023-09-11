@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 # frozen_string_literal: true
-# shareable_constant_value: literal
 
 require 'optparse'
 require 'etc'
@@ -34,7 +33,7 @@ def mode(file_status)
   mode
 end
 
-PERMISSION_MARKS = { r: 4, w: 2, x: 1 }
+PERMISSION_MARKS = { r: 4, w: 2, x: 1 }.freeze
 
 def change_numbers_to_chars(index, number, special_permission)
   PERMISSION_MARKS.map do |permission_mark, value|
@@ -49,7 +48,7 @@ def change_numbers_to_chars(index, number, special_permission)
   end
 end
 
-SPECIAL_PERMISSIONS = { t: '1', sgid: '2', suid: '4' }
+SPECIAL_PERMISSIONS = { t: '1', sgid: '2', suid: '4' }.freeze
 
 def change_x_to_special_permission(number, special_permission)
   special_permission_key = SPECIAL_PERMISSIONS.key(special_permission)
