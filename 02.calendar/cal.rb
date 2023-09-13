@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# frozen_string_literal: true
+
 # ライブラリの読み込み。
 require 'date'
 require 'optparse'
@@ -13,8 +15,8 @@ year = today.year
 month = today.mon
 
 # 年月を指定するオプションを定義。
-opt.on('-y VAL') {|v| year = v.to_i }
-opt.on('-m VAL') {|v| month = v.to_i }
+opt.on('-y VAL') { |v| year = v.to_i }
+opt.on('-m VAL') { |v| month = v.to_i }
 opt.parse!(ARGV)
 
 # 一日と最終日のオブジェクトを作成。
@@ -23,15 +25,15 @@ last_date = Date.new(year, month, -1)
 
 # カレンダーの年月と曜日を表示。
 puts "#{month}月 #{year}".center(20)
-puts "日 月 火 水 木 金 土"
+puts '日 月 火 水 木 金 土'
 
 # 一日の曜日に合わせて、一日のインデントを算出。
 ADDITIONAL_INDENT = 3
-add_count = first_date.strftime(format = "%w").to_i
+add_count = first_date.strftime('%w').to_i
 indent = ADDITIONAL_INDENT * add_count
 
 # 一日のインデントを反映。
-print "".rjust(indent)
+print ''.rjust(indent)
 
 # 一日から最終日までをRangeクラスとeachメソッドによって、取得。
 (first_date..last_date).each do |date|
@@ -42,13 +44,13 @@ print "".rjust(indent)
   day = "\e[7m#{day}\e[0m" if date == today
 
   # 日にちを出力。
-  print "#{day}"
+  print day
 
   # 曜日によって、改行とスペースを変更。
   if date.saturday?
     puts
   else
-    print "".rjust(1)
+    print ''.rjust(1)
   end
 end
 
