@@ -5,8 +5,15 @@
 require 'optparse'
 require 'etc'
 
-params = ARGV.getopts('l').transform_keys(&:to_sym)
-files = Dir.glob('*')
+params = ARGV.getopts('alr').transform_keys(&:to_sym)
+
+def files(params)
+  flags = params[:a] ? File::FNM_DOTMATCH : 0
+  files = Dir.glob('*', flags)
+  params[:r] ? files.reverse : files
+end
+
+files = files(params)
 
 NUMBER_OF_COLUMNS = 3
 
