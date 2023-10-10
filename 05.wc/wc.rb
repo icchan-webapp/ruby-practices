@@ -48,9 +48,9 @@ def build_stat(params, lines:, words:, bytesize:, path: nil)
 end
 
 def build_total(params, path_stats)
-  total_lines =     path_stats.map { |stat| stat[:number_of_lines].to_i }.sum if params[:number_of_lines]
-  total_words =     path_stats.map { |stat| stat[:number_of_words].to_i }.sum if params[:number_of_words]
-  total_bytesizes = path_stats.map { |stat| stat[:bytesize].to_i }.sum        if params[:bytesize]
+  total_lines =     path_stats.map { |stat| stat[:number_of_lines] }.sum if params[:number_of_lines]
+  total_words =     path_stats.map { |stat| stat[:number_of_words] }.sum if params[:number_of_words]
+  total_bytesizes = path_stats.map { |stat| stat[:bytesize] }.sum        if params[:bytesize]
 
   [total_lines, total_words, total_bytesizes].compact
 end
