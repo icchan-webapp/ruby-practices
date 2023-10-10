@@ -55,16 +55,16 @@ def build_total(params, path_stats)
   [total_lines, total_words, total_bytesizes].compact
 end
 
-INDENT = 7
+SPACE = 7
 
 def print_format(stat)
   print ' '
-  puts stat.values.map { |v| v.to_s.rjust(INDENT) }.join(' ')
+  puts stat.values.map { |v| v.to_s.rjust(SPACE) }.join(' ')
 end
 
 def print_total(total)
   print ' '
-  print total.map { |v| v.to_s.rjust(INDENT) }.join(' ')
+  print total.map { |v| v.to_s.rjust(SPACE) }.join(' ')
   puts ' total'
 end
 
