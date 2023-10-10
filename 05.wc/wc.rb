@@ -2,15 +2,15 @@
 
 require 'optparse'
 
-opt = OptionParser.new
-params = { number_of_lines: false, number_of_words: false, bytesize: false }
-opt.on('-l') { |v| params[:number_of_lines] = v }
-opt.on('-w') { |v| params[:number_of_words] = v }
-opt.on('-c') { |v| params[:bytesize] = v }
-opt.parse!(ARGV)
-params.transform_values!(&:!) unless params.values.any?
+def exec
+  opt = OptionParser.new
+  params = { number_of_lines: false, number_of_words: false, bytesize: false }
+  opt.on('-l') { |v| params[:number_of_lines] = v }
+  opt.on('-w') { |v| params[:number_of_words] = v }
+  opt.on('-c') { |v| params[:bytesize] = v }
+  opt.parse!(ARGV)
+  params.transform_values!(&:!) unless params.values.any?
 
-def exec(params)
   ARGV.empty? ? wc_stdin(params) : wc_files(params)
 end
 
@@ -68,4 +68,4 @@ def print_total(total)
   puts ' total'
 end
 
-exec(params)
+exec
