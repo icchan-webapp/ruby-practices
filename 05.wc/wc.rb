@@ -16,8 +16,7 @@ end
 
 def wc_stdin(params)
   lines = ARGF.to_a
-  bytesize = lines.map(&:bytesize).sum
-  stat = build_stat(params, lines:, words: lines.join, bytesize:)
+  stat = build_stat(params, lines)
   print_format(stat)
 end
 
@@ -25,8 +24,8 @@ def wc_files(params, paths: ARGV)
   path_stats =
     paths.map do |path|
       file = File.read(path)
-      bytesize = file.bytesize
-      build_stat(params, lines: file.lines, words: file, bytesize:, path:)
+      lines = file.lines
+      build_stat(params, lines, path:)
     end
 
   path_stats.each { |stat| print_format(stat) }
@@ -37,14 +36,18 @@ def wc_files(params, paths: ARGV)
   print_total(total)
 end
 
-def build_stat(params, lines:, words:, bytesize:, path: nil)
-  number_of_lines =    { number_of_lines: lines.size }              if params[:number_of_lines]
-  number_of_words =    { number_of_words: words.split(/\s+/).size } if params[:number_of_words]
-  bytesize_of_string = { bytesize: }                                if params[:bytesize]
-  path =               { path: }
+def build_stat(params, lines, path: nil)
+  number_of_lines = lines.size
+  words = lines.join.split(/\s+/)
+  number_of_words = words.size
+  bytesize = lines.map(&:bytesize).sum
 
-  stat = [number_of_lines, number_of_words, bytesize_of_string, path].filter { |v| !v.nil? }
-  {}.merge(*stat)
+  stat = {}
+  stat[:number_of_lines] = number_of_lines if params[:number_of_lines]
+  stat[:number_of_words] = number_of_words if params[:number_of_words]
+  stat[:bytesize] = bytesize if params[:bytesize]
+  stat[:path] = path
+  stat
 end
 
 def build_total(params, path_stats)
