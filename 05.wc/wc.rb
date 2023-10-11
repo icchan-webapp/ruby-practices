@@ -16,59 +16,53 @@ end
 
 def wc_stdin(params)
   lines = ARGF.to_a
-  stat = build_stat(params, lines)
-  print_format(stat)
+  stat = build_stat(lines)
+  print_format(params, stat)
 end
 
 def wc_files(params, paths: ARGV)
   path_stats =
     paths.map do |path|
-      file = File.read(path)
-      lines = file.lines
-      build_stat(params, lines, path:)
+      lines = File.read(path).lines
+      build_stat(lines, path:)
     end
 
-  path_stats.each { |stat| print_format(stat) }
-
-  return if path_stats.size <= 1
-
-  total = build_total(params, path_stats)
-  print_total(total)
+  path_stats << build_total(path_stats) if path_stats.size > 1
+  path_stats.each { |stat| print_format(params, stat) }
 end
 
-def build_stat(params, lines, path: nil)
+def build_stat(lines, path: nil)
   number_of_lines = lines.size
   words = lines.join.split(/\s+/)
   number_of_words = words.size
   bytesize = lines.map(&:bytesize).sum
 
   stat = {}
-  stat[:number_of_lines] = number_of_lines if params[:number_of_lines]
-  stat[:number_of_words] = number_of_words if params[:number_of_words]
-  stat[:bytesize] = bytesize if params[:bytesize]
+  stat[:number_of_lines] = number_of_lines
+  stat[:number_of_words] = number_of_words
+  stat[:bytesize] = bytesize
   stat[:path] = path
   stat
 end
 
-def build_total(params, path_stats)
-  total_lines = path_stats.map { |stat| stat[:number_of_lines] }.sum if params[:number_of_lines]
-  total_words = path_stats.map { |stat| stat[:number_of_words] }.sum if params[:number_of_words]
-  total_bytesizes = path_stats.map { |stat| stat[:bytesize] }.sum if params[:bytesize]
+def build_total(path_stats)
+  total_lines = path_stats.map { |stat| stat[:number_of_lines] }.sum
+  total_words = path_stats.map { |stat| stat[:number_of_words] }.sum
+  total_bytesize = path_stats.map { |stat| stat[:bytesize] }.sum
 
-  [total_lines, total_words, total_bytesizes].compact
+  total = {}
+  total[:number_of_lines] = total_lines
+  total[:number_of_words] = total_words
+  total[:bytesize] = total_bytesize
+  total[:path] = 'total'
+  total
 end
 
-SPACE = 7
+SPACE = 8
 
-def print_format(stat)
-  print ' '
-  puts stat.values.map { |v| v.to_s.rjust(SPACE) }.join(' ')
-end
-
-def print_total(total)
-  print ' '
-  print total.map { |v| v.to_s.rjust(SPACE) }.join(' ')
-  puts ' total'
+def print_format(params, stat)
+  print stat.map { |k, v| v.to_s.rjust(SPACE) if params[k] }.join
+  puts " #{stat[:path]}"
 end
 
 exec
