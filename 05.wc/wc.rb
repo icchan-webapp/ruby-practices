@@ -53,10 +53,10 @@ def build_total(path_stats)
   }
 end
 
-SPACE = 8
+WIDTH = 8
 
 def print_format(params, stat)
-  print stat.map { |k, v| v.to_s.rjust(SPACE) if params[k] }.join
+  print stat.map { |k, v| v.to_s.rjust(WIDTH) if params[k] }.join
   puts " #{stat[:path]}"
 end
 
