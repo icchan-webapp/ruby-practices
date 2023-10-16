@@ -37,12 +37,7 @@ def build_stat(lines, path: nil)
   number_of_words = words.size
   bytesize = lines.map(&:bytesize).sum
 
-  stat = {}
-  stat[:number_of_lines] = number_of_lines
-  stat[:number_of_words] = number_of_words
-  stat[:bytesize] = bytesize
-  stat[:path] = path
-  stat
+  { number_of_lines:, number_of_words:, bytesize:, path: }
 end
 
 def build_total(path_stats)
@@ -50,12 +45,12 @@ def build_total(path_stats)
   total_words = path_stats.map { |stat| stat[:number_of_words] }.sum
   total_bytesize = path_stats.map { |stat| stat[:bytesize] }.sum
 
-  total = {}
-  total[:number_of_lines] = total_lines
-  total[:number_of_words] = total_words
-  total[:bytesize] = total_bytesize
-  total[:path] = 'total'
-  total
+  {
+    number_of_lines: total_lines,
+    number_of_words: total_words,
+    bytesize: total_bytesize,
+    path: 'total'
+  }
 end
 
 SPACE = 8
