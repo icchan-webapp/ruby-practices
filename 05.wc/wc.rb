@@ -56,7 +56,7 @@ end
 WIDTH = 8
 
 def print_format(params, stat)
-  print stat.map { |wc_opt, value_for_wc_opt| value_for_wc_opt.to_s.rjust(WIDTH) if params[wc_opt] }.join
+  print stat.map { |opt, value| value.to_s.rjust(WIDTH) if params[opt] }.join
   puts " #{stat[:path]}"
 end
 
