@@ -19,8 +19,8 @@ class FileDisplay
   def fetch_files_stat
     flags = @options[:a] ? File::FNM_DOTMATCH : 0
     file_names = Dir.glob('*', flags)
-    @options[:r] ? file_names.reverse! : file_names
-    file_names.map { |file_name| FileStat.new(file_name) }
+    sorted_file_names = @options[:r] ? file_names.reverse : file_names
+    sorted_file_names.map { |file_name| FileStat.new(file_name) }
   end
 
   def long_format
