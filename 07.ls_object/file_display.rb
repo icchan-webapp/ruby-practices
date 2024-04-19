@@ -10,7 +10,7 @@ class FileDisplay
     @file_stats = fetch_file_stats
   end
 
-  def format
+  def select_format
     @options[:l] ? long_format : short_format
   end
 
