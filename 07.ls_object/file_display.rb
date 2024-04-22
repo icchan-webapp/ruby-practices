@@ -45,10 +45,10 @@ class FileDisplay
     {
       file_mode: file_stat.file_mode,
       nlink: file_stat.nlink,
-      user_name: file_stat.user_name,
-      group_name: file_stat.group_name,
+      user_name: file_stat.user.name,
+      group_name: file_stat.group.name,
       size: file_stat.size,
-      mtime: file_stat.mtime,
+      mtime: file_stat.mtime.strftime('%_m %_d %H:%M'),
       name: file_stat.name
     }
   end

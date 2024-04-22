@@ -19,15 +19,15 @@ class FileStat
     FileMode.new(@name).build
   end
 
-  def user_name
-    Etc.getpwuid(@file_stat.uid).name
+  def user
+    Etc.getpwuid(@file_stat.uid)
   end
 
-  def group_name
-    Etc.getgrgid(@file_stat.gid).name
+  def group
+    Etc.getgrgid(@file_stat.gid)
   end
 
   def mtime
-    @file_stat.mtime.strftime('%_m %_d %H:%M')
+    @file_stat.mtime
   end
 end
