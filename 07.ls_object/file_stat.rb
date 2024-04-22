@@ -16,7 +16,7 @@ class FileStat
   end
 
   def file_mode
-    FileMode.new(@name).build
+    FileMode.new(@name).connect_file_type_and_permission_symbols
   end
 
   def user
