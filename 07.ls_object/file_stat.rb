@@ -30,8 +30,4 @@ class FileStat
   def mtime
     @file_stat.mtime.strftime('%_m %_d %H:%M')
   end
-
-  def build
-    { file_mode:, nlink:, user_name:, group_name:, size:, mtime:, name: }
-  end
 end

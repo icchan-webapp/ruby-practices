@@ -31,13 +31,26 @@ class FileDisplay
   end
 
   def format_file_stat(file_stat)
-    file_stat.build.map.with_index(1) do |stat, display_order_from_left|
+    stat_list = build_stat_list(file_stat)
+    stat_list.map.with_index(1) do |stat, display_order_from_left|
       stat_key = stat[0]
       stat_value = stat[1]
       margin = generate_margin(display_order_from_left)
       max_chars = calc_max_chars(@file_stats, stat_key)
       format_stat_value(display_order_from_left, stat_value, margin, max_chars)
     end.join
+  end
+
+  def build_stat_list(file_stat)
+    {
+      file_mode: file_stat.file_mode,
+      nlink: file_stat.nlink,
+      user_name: file_stat.user_name,
+      group_name: file_stat.group_name,
+      size: file_stat.size,
+      mtime: file_stat.mtime,
+      name: file_stat.name
+    }
   end
 
   def generate_margin(display_order_from_left)
@@ -52,7 +65,10 @@ class FileDisplay
   end
 
   def calc_max_chars(file_stats, stat_key)
-    file_stats.map { |file_stat| file_stat.build[stat_key].to_s.size }.max
+    file_stats.map do |file_stat|
+      stat_list = build_stat_list(file_stat)
+      stat_list[stat_key].to_s.size
+    end.max
   end
 
   def format_stat_value(display_order_from_left, stat_value, margin, max_chars)
