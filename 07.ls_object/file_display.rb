@@ -32,12 +32,13 @@ class FileDisplay
 
   def format_file_stat(file_stat)
     stat_list = build_stat_list(file_stat)
+    max_size_map = build_max_size_map(@file_stats)
+
     stat_list.map.with_index(1) do |stat, display_order_from_left|
       stat_key = stat[0]
       stat_value = stat[1]
       margin = generate_margin(display_order_from_left)
-      max_chars = calc_max_chars(@file_stats, stat_key)
-      format_stat_value(display_order_from_left, stat_value, margin, max_chars)
+      format_stat_value(display_order_from_left, stat_value, margin, max_size_map[stat_key])
     end.join
   end
 
@@ -53,6 +54,16 @@ class FileDisplay
     }
   end
 
+  def build_max_size_map(file_stats)
+    {
+      nlink: file_stats.map { |file_stat| file_stat.nlink.to_s.size }.max,
+      user_name: file_stats.map { |file_stat| file_stat.user.name.size }.max,
+      group_name: file_stats.map { |file_stat| file_stat.group.name.size }.max,
+      size: file_stats.map { |file_stat| file_stat.size.to_s.size }.max,
+      name: file_stats.map { |file_stat| file_stat.name.to_s.size }.max
+    }
+  end
+
   def generate_margin(display_order_from_left)
     case display_order_from_left
     when 1
@@ -64,17 +75,9 @@ class FileDisplay
     end
   end
 
-  def calc_max_chars(file_stats, stat_key)
-    file_stats.map do |file_stat|
-      stat_list = build_stat_list(file_stat)
-      stat_list[stat_key].to_s.size
-    end.max
-  end
-
   def format_stat_value(display_order_from_left, stat_value, margin, max_chars)
-    return stat_value.to_s.rjust(max_chars + margin) if display_order_from_left != 7
-
-    stat_value.ljust(max_chars).rjust(max_chars + margin)
+    return stat_value.to_s.rjust(max_chars.to_i + margin) if display_order_from_left != 7
+    stat_value.ljust(max_chars.to_i).rjust(max_chars.to_i + margin)
   end
 
   def short_format
