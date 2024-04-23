@@ -34,12 +34,15 @@ class FileDisplay
     stat_list = build_stat_list(file_stat)
     max_size_map = build_max_size_map(@file_stats)
 
-    stat_list.map.with_index(1) do |stat, display_order_from_left|
-      stat_key = stat[0]
-      stat_value = stat[1]
-      margin = generate_margin(display_order_from_left)
-      format_stat_value(display_order_from_left, stat_value, margin, max_size_map[stat_key])
-    end.join
+    format([
+      '%<file_mode>s',
+      "%<nlink>#{max_size_map[:nlink] + 1}s",
+      "%<user_name>-#{max_size_map[:user_name] + 1}s",
+      "%<group_name>-#{max_size_map[:group_name] + 1}s",
+      "%<size>#{max_size_map[:size]}s",
+      '%<mtime>2s',
+      "%<name>s\n"
+    ].join(' '), stat_list)
   end
 
   def build_stat_list(file_stat)
@@ -62,22 +65,6 @@ class FileDisplay
       size: file_stats.map { |file_stat| file_stat.size.to_s.size }.max,
       name: file_stats.map { |file_stat| file_stat.name.to_s.size }.max
     }
-  end
-
-  def generate_margin(display_order_from_left)
-    case display_order_from_left
-    when 1
-      0
-    when 2, 3, 7
-      1
-    else
-      2
-    end
-  end
-
-  def format_stat_value(display_order_from_left, stat_value, margin, max_chars)
-    return stat_value.to_s.rjust(max_chars.to_i + margin) if display_order_from_left != 7
-    stat_value.ljust(max_chars.to_i).rjust(max_chars.to_i + margin)
   end
 
   def short_format
