@@ -20,9 +20,8 @@ class FileMode
 
   def initialize(file_name)
     @file_type = fetch_file_type(file_name)
-    @permission_numbers = fetch_permission_numbers(File.stat(file_name))
-    @permission_symbols =
-      @permission_numbers[1..3].each_char.map.with_index { |permission_number, index| change_numbers_to_symbols(permission_number, index) }.join
+    permission_numbers = fetch_permission_numbers(File.stat(file_name))
+    @permission_symbols = change_numbers_to_symbols(permission_numbers)
   end
 
   def connect_file_type_and_permission_symbols
@@ -50,18 +49,20 @@ class FileMode
     end
   end
 
-  def change_numbers_to_symbols(permission_number, index)
-    special_permission = @permission_numbers[0]
-    mode_map = PERMISSION_MAP[permission_number].dup
-    before_symbol = mode_map[2]
-    after_symbol = fetch_after_symbol(index, special_permission, before_symbol)
+  def change_numbers_to_symbols(permission_numbers)
+    permission_numbers[1..3].each_char.map.with_index do |permission_number, index|
+      special_permission = permission_numbers[0]
+      mode_map = PERMISSION_MAP[permission_number].dup
+      before_symbol = mode_map[2]
+      after_symbol = fetch_after_symbol(index, special_permission, before_symbol)
 
-    if !after_symbol.nil?
-      mode_map[2] = after_symbol
-      return mode_map
-    end
+      if !after_symbol.nil?
+        mode_map[2] = after_symbol
+        next mode_map
+      end
 
-    PERMISSION_MAP[permission_number]
+      PERMISSION_MAP[permission_number]
+    end.join
   end
 
   def fetch_after_symbol(index, special_permission, before_symbol)
