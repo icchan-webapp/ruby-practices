@@ -31,7 +31,7 @@ class FileDisplay
   end
 
   def format_file_stat(file_stat)
-    stat_list = build_stat_list(file_stat)
+    stat_map = build_stat_map(file_stat)
     max_size_map = build_max_size_map(@file_stats)
 
     format([
@@ -42,10 +42,10 @@ class FileDisplay
       "%<size>#{max_size_map[:size]}s",
       '%<mtime>2s',
       "%<name>s\n"
-    ].join(' '), stat_list)
+    ].join(' '), stat_map)
   end
 
-  def build_stat_list(file_stat)
+  def build_stat_map(file_stat)
     {
       file_mode: file_stat.file_mode,
       nlink: file_stat.nlink,
