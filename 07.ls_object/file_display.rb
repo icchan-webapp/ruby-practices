@@ -35,8 +35,8 @@ class FileDisplay
     stat_map = {
       file_mode: file_detail.file_mode,
       nlink: file_detail.nlink,
-      user_name: file_detail.user.name,
-      group_name: file_detail.group.name,
+      user_name: file_detail.user_name,
+      group_name: file_detail.group_name,
       size: file_detail.size,
       mtime: file_detail.mtime.strftime('%_m %_d %H:%M'),
       name: file_detail.name

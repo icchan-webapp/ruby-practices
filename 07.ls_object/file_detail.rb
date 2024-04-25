@@ -23,7 +23,15 @@ class FileDetail
     Etc.getpwuid(@file_stat.uid)
   end
 
+  def user_name
+    user.name
+  end
+
   def group
     Etc.getgrgid(@file_stat.gid)
+  end
+
+  def group_name
+    group.name
   end
 end
