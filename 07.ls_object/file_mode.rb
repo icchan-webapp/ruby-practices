@@ -25,10 +25,12 @@ class FileMode
   end
 
   def connect_file_type_and_permission_symbols
-    @file_type + @permission_symbols
+    file_type + permission_symbols
   end
 
   private
+
+  attr_reader :file_type, :permission_symbols
 
   def fetch_permission_numbers(file_stat)
     mode = file_stat.mode.to_s(8)
