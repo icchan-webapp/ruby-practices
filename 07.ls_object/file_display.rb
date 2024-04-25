@@ -34,7 +34,7 @@ class FileDisplay
     stat_map = build_stat_map(file_stat)
     max_size_map = build_max_size_map(@file_stats)
 
-    format([
+    merged_file_stat = [
       '%<file_mode>s',
       "%<nlink>#{max_size_map[:nlink] + 1}s",
       "%<user_name>-#{max_size_map[:user_name] + 1}s",
@@ -42,7 +42,9 @@ class FileDisplay
       "%<size>#{max_size_map[:size]}s",
       '%<mtime>2s',
       "%<name>s\n"
-    ].join(' '), stat_map)
+    ].join(' ')
+
+    format(merged_file_stat, stat_map)
   end
 
   def build_stat_map(file_stat)
