@@ -6,4 +6,4 @@ require_relative './file_display'
 require_relative './file_stat'
 require_relative './file_mode'
 
-FileDisplay.new.select_format
+FileDisplay.new.format_file_stat_strings
