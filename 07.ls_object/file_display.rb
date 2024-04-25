@@ -3,7 +3,7 @@
 require 'optparse'
 
 class FileDisplay
-  NUMBER_OF_COLUMNS = 3
+  COLUMN_COUNT = 3
 
   def initialize
     @options = ARGV.getopts('alr').transform_keys(&:to_sym)
@@ -67,18 +67,18 @@ class FileDisplay
   def short_format
     file_names = @file_stats.map(&:name)
     width = file_names.map(&:size).max + 1
-    number_of_rows = (file_names.size.to_f / NUMBER_OF_COLUMNS).ceil
-    show_formatted_file_names(file_names, width, number_of_rows)
+    row_count = (file_names.size.to_f / COLUMN_COUNT).ceil
+    show_formatted_file_names(file_names, width, row_count)
   end
 
-  def show_formatted_file_names(file_names, width, number_of_rows)
-    (0..number_of_rows - 1).each do |i|
+  def show_formatted_file_names(file_names, width, row_count)
+    (0..row_count - 1).each do |i|
       files_for_row = []
       file_name_index = i
 
       while file_name_index <= file_names.size - 1
         files_for_row << file_names[file_name_index].ljust(width)
-        file_name_index += number_of_rows
+        file_name_index += row_count
       end
 
       puts files_for_row.join
