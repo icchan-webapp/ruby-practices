@@ -31,9 +31,16 @@ class FileDisplay
   end
 
   def format_file_stat(file_stat)
-    stat_map = build_stat_map(file_stat)
     max_size_map = build_max_size_map(@file_stats)
-
+    stat_map = {
+      file_mode: file_stat.file_mode,
+      nlink: file_stat.nlink,
+      user_name: file_stat.user.name,
+      group_name: file_stat.group.name,
+      size: file_stat.size,
+      mtime: file_stat.mtime.strftime('%_m %_d %H:%M'),
+      name: file_stat.name
+    }
     merged_file_stat = [
       '%<file_mode>s',
       "%<nlink>#{max_size_map[:nlink] + 1}s",
@@ -45,18 +52,6 @@ class FileDisplay
     ].join(' ')
 
     format(merged_file_stat, stat_map)
-  end
-
-  def build_stat_map(file_stat)
-    {
-      file_mode: file_stat.file_mode,
-      nlink: file_stat.nlink,
-      user_name: file_stat.user.name,
-      group_name: file_stat.group.name,
-      size: file_stat.size,
-      mtime: file_stat.mtime.strftime('%_m %_d %H:%M'),
-      name: file_stat.name
-    }
   end
 
   def build_max_size_map(file_stats)
