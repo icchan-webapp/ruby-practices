@@ -7,41 +7,41 @@ class FileDisplay
 
   def initialize
     @options = ARGV.getopts('alr').transform_keys(&:to_sym)
-    @file_stats = fetch_file_stats
+    @file_details = fetch_file_details
   end
 
-  def format_file_stat_strings
+  def format_file_detail_strings
     @options[:l] ? long_format : short_format
   end
 
   private
 
-  def fetch_file_stats
+  def fetch_file_details
     flags = @options[:a] ? File::FNM_DOTMATCH : 0
     file_names = Dir.glob('*', flags)
     sorted_file_names = @options[:r] ? file_names.reverse : file_names
-    sorted_file_names.map { |file_name| FileStat.new(file_name) }
+    sorted_file_names.map { |file_name| FileDetail.new(file_name) }
   end
 
   def long_format
-    blocks_total = @file_stats.map(&:blocks).sum
+    blocks_total = @file_details.map(&:blocks).sum
     puts "total #{blocks_total}"
 
-    @file_stats.each { |file_stat| puts format_file_stat(file_stat) }
+    @file_details.each { |file_detail| puts format_file_detail(file_detail) }
   end
 
-  def format_file_stat(file_stat)
-    max_size_map = build_max_size_map(@file_stats)
+  def format_file_detail(file_detail)
+    max_size_map = build_max_size_map(@file_details)
     stat_map = {
-      file_mode: file_stat.file_mode,
-      nlink: file_stat.nlink,
-      user_name: file_stat.user.name,
-      group_name: file_stat.group.name,
-      size: file_stat.size,
-      mtime: file_stat.mtime.strftime('%_m %_d %H:%M'),
-      name: file_stat.name
+      file_mode: file_detail.file_mode,
+      nlink: file_detail.nlink,
+      user_name: file_detail.user.name,
+      group_name: file_detail.group.name,
+      size: file_detail.size,
+      mtime: file_detail.mtime.strftime('%_m %_d %H:%M'),
+      name: file_detail.name
     }
-    merged_file_stat = [
+    merged_file_detail = [
       '%<file_mode>s',
       "%<nlink>#{max_size_map[:nlink] + 1}s",
       "%<user_name>-#{max_size_map[:user_name] + 1}s",
@@ -51,21 +51,21 @@ class FileDisplay
       "%<name>s\n"
     ].join(' ')
 
-    format(merged_file_stat, stat_map)
+    format(merged_file_detail, stat_map)
   end
 
-  def build_max_size_map(file_stats)
+  def build_max_size_map(file_details)
     {
-      nlink: file_stats.map { |file_stat| file_stat.nlink.to_s.size }.max,
-      user_name: file_stats.map { |file_stat| file_stat.user.name.size }.max,
-      group_name: file_stats.map { |file_stat| file_stat.group.name.size }.max,
-      size: file_stats.map { |file_stat| file_stat.size.to_s.size }.max,
-      name: file_stats.map { |file_stat| file_stat.name.to_s.size }.max
+      nlink: file_details.map { |file_detail| file_detail.nlink.to_s.size }.max,
+      user_name: file_details.map { |file_detail| file_detail.user.name.size }.max,
+      group_name: file_details.map { |file_detail| file_detail.group.name.size }.max,
+      size: file_details.map { |file_detail| file_detail.size.to_s.size }.max,
+      name: file_details.map { |file_detail| file_detail.name.to_s.size }.max
     }
   end
 
   def short_format
-    file_names = @file_stats.map(&:name)
+    file_names = @file_details.map(&:name)
     width = file_names.map(&:size).max + 1
     row_count = (file_names.size.to_f / COLUMN_COUNT).ceil
     show_formatted_file_names(file_names, width, row_count)

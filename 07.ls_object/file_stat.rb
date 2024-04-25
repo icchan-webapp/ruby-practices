@@ -3,7 +3,7 @@
 require 'etc'
 require 'forwardable'
 
-class FileStat
+class FileDetail
   extend Forwardable
 
   attr_reader :name
