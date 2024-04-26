@@ -10,7 +10,7 @@ class FileDisplay
     @file_details = fetch_file_details
   end
 
-  def format_file_detail_strings
+  def show_formatted_file_details
     @options[:l] ? long_format : short_format
   end
 
