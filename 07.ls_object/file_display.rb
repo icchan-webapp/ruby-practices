@@ -34,7 +34,7 @@ class FileDisplay
     max_size_map = build_max_size_map(@file_details)
 
     [
-      file_detail.file_mode,
+      file_detail.fetch_file_mode_strings,
       format("%#{max_size_map[:nlink] + 1}s", file_detail.nlink),
       format("%-#{max_size_map[:user_name] + 1}s", file_detail.user_name),
       format("%-#{max_size_map[:group_name] + 1}s", file_detail.group_name),

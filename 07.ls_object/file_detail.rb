@@ -15,8 +15,9 @@ class FileDetail
     @name = file_name
   end
 
-  def file_mode
-    FileMode.new(@name).connect_file_type_and_permission_symbols
+  def fetch_file_mode_strings
+    file_mode = FileMode.new(@name)
+    file_mode.file_type + file_mode.permission_symbols
   end
 
   def user
