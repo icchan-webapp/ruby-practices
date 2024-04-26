@@ -68,10 +68,10 @@ class FileDisplay
     file_names = @file_details.map(&:name)
     width = file_names.map(&:size).max + 1
     row_count = (file_names.size.to_f / COLUMN_COUNT).ceil
-    show_formatted_file_names(file_names, width, row_count)
+    format_file_names(file_names, width, row_count)
   end
 
-  def show_formatted_file_names(file_names, width, row_count)
+  def format_file_names(file_names, width, row_count)
     (0..row_count - 1).each do |i|
       files_for_row = []
       file_name_index = i
