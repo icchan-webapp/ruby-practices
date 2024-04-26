@@ -32,26 +32,16 @@ class FileDisplay
 
   def format_file_detail(file_detail)
     max_size_map = build_max_size_map(@file_details)
-    stat_map = {
-      file_mode: file_detail.file_mode,
-      nlink: file_detail.nlink,
-      user_name: file_detail.user_name,
-      group_name: file_detail.group_name,
-      size: file_detail.size,
-      mtime: file_detail.mtime.strftime('%_m %_d %H:%M'),
-      name: file_detail.name
-    }
-    merged_file_detail = [
-      '%<file_mode>s',
-      "%<nlink>#{max_size_map[:nlink] + 1}s",
-      "%<user_name>-#{max_size_map[:user_name] + 1}s",
-      "%<group_name>-#{max_size_map[:group_name] + 1}s",
-      "%<size>#{max_size_map[:size]}s",
-      '%<mtime>2s',
-      "%<name>s\n"
-    ].join(' ')
 
-    format(merged_file_detail, stat_map)
+    [
+      file_detail.file_mode,
+      format("%#{max_size_map[:nlink] + 1}s", file_detail.nlink),
+      format("%-#{max_size_map[:user_name] + 1}s", file_detail.user_name),
+      format("%-#{max_size_map[:group_name] + 1}s", file_detail.group_name),
+      format("%#{max_size_map[:size]}s", file_detail.size),
+      format('%2s', file_detail.mtime.strftime('%_m %_d %H:%M')),
+      file_detail.name
+    ].join(' ')
   end
 
   def build_max_size_map(file_details)
