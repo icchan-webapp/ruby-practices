@@ -57,7 +57,7 @@ class FileDisplay
   def short_format
     file_names = @file_details.map(&:name)
     width = file_names.map(&:size).max + 1
-    row_count = (file_names.size.to_f / COLUMN_COUNT).ceil
+    row_count = file_names.size.ceildiv(COLUMN_COUNT)
     format_file_names(file_names, width, row_count)
   end
 
