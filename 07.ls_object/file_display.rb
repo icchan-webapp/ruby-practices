@@ -31,20 +31,20 @@ class FileDisplay
   end
 
   def format_file_detail(file_detail)
-    max_size_map = build_max_size_map(@file_details)
+    max_sizes = build_max_sizes(@file_details)
 
     [
       file_detail.fetch_file_mode_strings,
-      file_detail.nlink.to_s.rjust(max_size_map[:nlink] + 1),
-      file_detail.user_name.ljust(max_size_map[:user_name] + 1),
-      file_detail.group_name.ljust(max_size_map[:group_name] + 1),
-      file_detail.size.to_s.rjust(max_size_map[:size]),
+      file_detail.nlink.to_s.rjust(max_sizes[:nlink] + 1),
+      file_detail.user_name.ljust(max_sizes[:user_name] + 1),
+      file_detail.group_name.ljust(max_sizes[:group_name] + 1),
+      file_detail.size.to_s.rjust(max_sizes[:size]),
       file_detail.mtime.strftime('%_m %_d %H:%M'),
       file_detail.name
     ].join(' ')
   end
 
-  def build_max_size_map(file_details)
+  def build_max_sizes(file_details)
     {
       nlink: file_details.map { |file_detail| file_detail.nlink.to_s.size }.max,
       user_name: file_details.map { |file_detail| file_detail.user.name.size }.max,
