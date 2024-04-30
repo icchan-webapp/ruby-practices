@@ -35,11 +35,11 @@ class FileDisplay
 
     [
       file_detail.fetch_file_mode_strings,
-      format("%#{max_size_map[:nlink] + 1}s", file_detail.nlink),
-      format("%-#{max_size_map[:user_name] + 1}s", file_detail.user_name),
-      format("%-#{max_size_map[:group_name] + 1}s", file_detail.group_name),
-      format("%#{max_size_map[:size]}s", file_detail.size),
-      format('%2s', file_detail.mtime.strftime('%_m %_d %H:%M')),
+      file_detail.nlink.to_s.rjust(max_size_map[:nlink] + 1),
+      file_detail.user_name.ljust(max_size_map[:user_name] + 1),
+      file_detail.group_name.ljust(max_size_map[:group_name] + 1),
+      file_detail.size.to_s.rjust(max_size_map[:size]),
+      file_detail.mtime.strftime('%_m %_d %H:%M'),
       file_detail.name
     ].join(' ')
   end
