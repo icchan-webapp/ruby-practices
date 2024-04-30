@@ -47,8 +47,8 @@ class FileDisplay
   def build_max_sizes(file_details)
     {
       nlink: file_details.map { |file_detail| file_detail.nlink.to_s.size }.max,
-      user_name: file_details.map { |file_detail| file_detail.user.name.size }.max,
-      group_name: file_details.map { |file_detail| file_detail.group.name.size }.max,
+      user_name: file_details.map { |file_detail| file_detail.user_name.size }.max,
+      group_name: file_details.map { |file_detail| file_detail.group_name.size }.max,
       size: file_details.map { |file_detail| file_detail.size.to_s.size }.max,
       name: file_details.map { |file_detail| file_detail.name.to_s.size }.max
     }
