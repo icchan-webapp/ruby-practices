@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FileMode
-  attr_reader :file_type, :permission_symbols
+  attr_reader :entry_type, :permissions
 
   PERMISSION_MAP = {
     '0' => '---',
@@ -21,9 +21,9 @@ class FileMode
   }.freeze
 
   def initialize(file_name)
-    @file_type = fetch_file_type(file_name)
+    @entry_type = fetch_entry_type(file_name)
     permission_numbers = fetch_permission_numbers(File.stat(file_name))
-    @permission_symbols = change_numbers_to_symbols(permission_numbers)
+    @permissions = change_numbers_to_symbols(permission_numbers)
   end
 
   private
@@ -34,16 +34,16 @@ class FileMode
     mode[2..5]
   end
 
-  def fetch_file_type(file_name)
-    file_type = File.ftype(file_name)
+  def fetch_entry_type(file_name)
+    entry_type = File.ftype(file_name)
 
-    case file_type
+    case entry_type
     when 'fifo'
       'p'
     when 'file'
       '-'
     else
-      file_type.chr
+      entry_type.chr
     end
   end
 

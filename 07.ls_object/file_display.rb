@@ -34,7 +34,7 @@ class FileDisplay
     max_sizes = build_max_sizes(@file_details)
 
     [
-      file_detail.fetch_file_mode_strings,
+      file_detail.entry_type + file_detail.permissions,
       file_detail.nlink.to_s.rjust(max_sizes[:nlink] + 1),
       file_detail.user_name.ljust(max_sizes[:user_name] + 1),
       file_detail.group_name.ljust(max_sizes[:group_name] + 1),
